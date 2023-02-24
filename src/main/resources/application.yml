@@ -1,3 +1,15 @@
 server:
   port: 28099
 
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:3307/todolist?serverTimezone=Asia/Seoul
+    username: chany
+    password: chany1234
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create
+    show-sql: true
