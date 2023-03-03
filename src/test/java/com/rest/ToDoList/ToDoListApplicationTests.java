@@ -1,4 +1,4 @@
-package com.moais.ToDoList;
+package com.rest.ToDoList;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

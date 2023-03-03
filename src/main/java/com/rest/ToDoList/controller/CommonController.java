@@ -1,4 +1,4 @@
-package com.moais.ToDoList.controller;
+package com.rest.ToDoList.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,7 +10,7 @@ public class CommonController {
     @GetMapping("/hello")
     public String hello() {
 
-        return "Hello Moais";
+        return "Hello Rest";
     }
 
 }

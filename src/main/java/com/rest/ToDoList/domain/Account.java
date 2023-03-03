@@ -1,4 +1,4 @@
-package com.moais.ToDoList.domain;
+package com.rest.ToDoList.domain;
 
 import lombok.*;
 
