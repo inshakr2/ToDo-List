@@ -1,4 +1,4 @@
-package com.rest.ToDoList.todo;
+package com.rest.ToDoList.domain;
 
 import com.rest.ToDoList.dto.ToDoDto;
 import lombok.EqualsAndHashCode;
@@ -23,14 +23,14 @@ public class ToDo {
     private LocalDateTime enrollmentDateTime;
     private ToDoStatus toDoStatus;
 
-    public static ToDo creationTask(ToDoDto dto) {
+    public static ToDo createTask(ToDoDto dto) {
 
         ToDo toDo = new ToDo();
         toDo.setName(dto.getName());
         toDo.setDescription(dto.getDescription());
         toDo.setEnrollmentDateTime(dto.getEnrollmentDateTime());
         toDo.setToDoStatus(ToDoStatus.TODO);
-
+        toDo.setId(10L); // Test 용 임시 저장
         return toDo;
     }
 }

@@ -1,4 +1,4 @@
-package com.rest.ToDoList.todo;
+package com.rest.ToDoList.domain;
 
 public enum ToDoStatus {
 
