@@ -1,7 +1,8 @@
-package com.rest.ToDoList.domain;
+package com.rest.ToDoList.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rest.ToDoList.controller.ToDoController;
+import com.rest.ToDoList.domain.ToDo;
 import com.rest.ToDoList.dto.ToDoDto;
 import com.rest.ToDoList.service.ToDoService;
 import org.junit.jupiter.api.Test;
@@ -53,4 +54,21 @@ public class ToDoControllerTests {
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
         ;
     }
+
+    @Test
+    public void createToDo_Bad_Request_Out_Of_DtoValue() throws Exception {
+
+        ToDoDto dto = new ToDoDto("Test ToDo List", "Test" );
+        ToDo toDo = ToDo.createTask(dto);
+
+        mockMvc.perform(post("/api/todo")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaTypes.HAL_JSON)
+                    .content(objectMapper.writeValueAsString(toDo)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+        ;
+    }
+
+
 }

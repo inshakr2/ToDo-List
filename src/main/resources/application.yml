@@ -13,3 +13,7 @@ spring:
     hibernate:
       ddl-auto: create
     show-sql: true
+
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true

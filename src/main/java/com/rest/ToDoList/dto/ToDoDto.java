@@ -15,7 +15,11 @@ public class ToDoDto {
     private String name;
     private String description;
 
-    private LocalDateTime enrollmentDateTime;
+    private LocalDateTime enrollmentDateTime = LocalDateTime.now();
 
 
+    public ToDoDto(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 }
