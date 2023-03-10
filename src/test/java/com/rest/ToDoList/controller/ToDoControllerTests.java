@@ -70,5 +70,18 @@ public class ToDoControllerTests {
         ;
     }
 
+    @Test
+    public void createToDo_Bad_Request_Empty_Input() throws Exception {
+
+        ToDoDto dto = new ToDoDto();
+
+        mockMvc.perform(post("/api/todo")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaTypes.HAL_JSON)
+                    .content(objectMapper.writeValueAsString(dto)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+        ;
+    }
 
 }

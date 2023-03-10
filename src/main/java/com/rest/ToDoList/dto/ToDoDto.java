@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -12,7 +13,9 @@ import java.time.LocalDateTime;
 @Getter @Setter
 public class ToDoDto {
 
+    @NotEmpty
     private String name;
+    @NotEmpty
     private String description;
 
     private LocalDateTime enrollmentDateTime = LocalDateTime.now();

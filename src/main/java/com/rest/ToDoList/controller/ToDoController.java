@@ -8,10 +8,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDateTime;
 
@@ -26,7 +28,11 @@ public class ToDoController {
     private final ToDoService toDoService;
 
     @PostMapping
-    public ResponseEntity createToDo(@RequestBody ToDoDto toDoDto) {
+    public ResponseEntity createToDo(@RequestBody @Valid ToDoDto toDoDto, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().build();
+        }
 
         ToDo toDo = toDoService.makeToDoList(toDoDto);
         URI createdUri = linkTo(ToDoController.class).slash(toDo.getId()).toUri();
