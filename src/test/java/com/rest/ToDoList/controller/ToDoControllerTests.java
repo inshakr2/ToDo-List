@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Description;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -37,8 +38,7 @@ public class ToDoControllerTests {
     @Test
     public void createToDo() throws Exception {
 
-        ToDoDto dto = new ToDoDto("Test ToDo List", "Test",
-                                    LocalDateTime.of(2023,3,6,20,40));
+        ToDoDto dto = new ToDoDto("Test ToDo List", "Test");
 
 //        ToDo toDo = ToDo.createTask(dto);
 //        Mockito.when(toDoService.makeToDoList(dto)).thenReturn(toDo);
@@ -79,6 +79,22 @@ public class ToDoControllerTests {
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaTypes.HAL_JSON)
                     .content(objectMapper.writeValueAsString(dto)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+        ;
+    }
+
+    @Test
+    public void createToDo_Bad_Request_Wrong_Input() throws Exception {
+
+        ToDoDto dto = new ToDoDto("Test ToDo List", "Test",
+                                LocalDateTime.now(),
+                                LocalDateTime.now().minusDays(10));
+
+        mockMvc.perform(post("/api/todo")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaTypes.HAL_JSON)
+                .content(objectMapper.writeValueAsString(dto)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
         ;

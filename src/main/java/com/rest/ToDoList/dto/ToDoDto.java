@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,6 +21,8 @@ public class ToDoDto {
 
     private LocalDateTime enrollmentDateTime = LocalDateTime.now();
 
+    // 기본 설정 오늘 자정까지
+    private LocalDateTime endDateTime = LocalDateTime.now().plusDays(1).truncatedTo(ChronoUnit.DAYS);
 
     public ToDoDto(String name, String description) {
         this.name = name;

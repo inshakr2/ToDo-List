@@ -24,6 +24,7 @@ public class ToDo {
     private String description;
 
     private LocalDateTime enrollmentDateTime;
+    private LocalDateTime endDateTime;
 
     @Enumerated(EnumType.STRING)
     private ToDoStatus toDoStatus;
@@ -34,6 +35,7 @@ public class ToDo {
         toDo.setName(dto.getName());
         toDo.setDescription(dto.getDescription());
         toDo.setEnrollmentDateTime(dto.getEnrollmentDateTime());
+        toDo.setEnrollmentDateTime(dto.getEndDateTime());
         toDo.setToDoStatus(ToDoStatus.TODO);
 
         return toDo;

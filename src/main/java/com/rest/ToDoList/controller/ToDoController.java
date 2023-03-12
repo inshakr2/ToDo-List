@@ -3,6 +3,7 @@ package com.rest.ToDoList.controller;
 import com.rest.ToDoList.dto.ToDoDto;
 import com.rest.ToDoList.domain.ToDo;
 import com.rest.ToDoList.service.ToDoService;
+import com.rest.ToDoList.utils.ToDoValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.MediaTypes;
@@ -26,9 +27,16 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 public class ToDoController {
 
     private final ToDoService toDoService;
+    private final ToDoValidator toDoValidator;
 
     @PostMapping
     public ResponseEntity createToDo(@RequestBody @Valid ToDoDto toDoDto, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        toDoValidator.validate(toDoDto, bindingResult);
 
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().build();

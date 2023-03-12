@@ -11,7 +11,7 @@ class ToDoTest {
 
     @Test
     public void createTask() {
-        ToDoDto dto = new ToDoDto("Test ToDo List", "Just Test", LocalDateTime.now());
+        ToDoDto dto = new ToDoDto("Test ToDo List", "Just Test");
         ToDo toDo = ToDo.createTask(dto);
 
         assertThat(toDo).isNotNull();
