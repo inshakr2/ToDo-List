@@ -97,6 +97,11 @@ public class ToDoControllerTests {
                 .content(objectMapper.writeValueAsString(dto)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("objectName").exists())
+                .andExpect(jsonPath("field").exists())
+                .andExpect(jsonPath("defaultMessage").exists())
+                .andExpect(jsonPath("code").exists())
+                .andExpect(jsonPath("rejectedValue").exists())
         ;
     }
 

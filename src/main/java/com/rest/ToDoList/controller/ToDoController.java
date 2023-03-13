@@ -33,13 +33,13 @@ public class ToDoController {
     public ResponseEntity createToDo(@RequestBody @Valid ToDoDto toDoDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(bindingResult);
         }
 
         toDoValidator.validate(toDoDto, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(bindingResult);
         }
 
         ToDo toDo = toDoService.makeToDoList(toDoDto);

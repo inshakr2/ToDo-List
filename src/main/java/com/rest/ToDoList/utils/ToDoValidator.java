@@ -10,7 +10,7 @@ public class ToDoValidator {
     public void validate(ToDoDto toDoDto, BindingResult bindingResult) {
 
         if (toDoDto.getEndDateTime().isBefore(toDoDto.getEnrollmentDateTime())) {
-            bindingResult.rejectValue("endDateTime", "wrongValue");
+            bindingResult.rejectValue("endDateTime", "wrongValue", "endDateTime is wrong");
         }
     }
 }
