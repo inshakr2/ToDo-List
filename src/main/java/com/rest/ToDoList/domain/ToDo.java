@@ -35,7 +35,7 @@ public class ToDo {
         toDo.setName(dto.getName());
         toDo.setDescription(dto.getDescription());
         toDo.setEnrollmentDateTime(dto.getEnrollmentDateTime());
-        toDo.setEnrollmentDateTime(dto.getEndDateTime());
+        toDo.setEndDateTime(dto.getEndDateTime());
         toDo.setToDoStatus(ToDoStatus.TODO);
 
         return toDo;
