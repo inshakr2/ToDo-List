@@ -3,10 +3,12 @@ package com.rest.ToDoList.controller;
 import com.rest.ToDoList.dto.ToDoDto;
 import com.rest.ToDoList.domain.ToDo;
 import com.rest.ToDoList.service.ToDoService;
+import com.rest.ToDoList.utils.ToDoResource;
 import com.rest.ToDoList.utils.ToDoValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -43,8 +45,16 @@ public class ToDoController {
         }
 
         ToDo toDo = toDoService.makeToDoList(toDoDto);
-        URI createdUri = linkTo(ToDoController.class).slash(toDo.getId()).toUri();
 
-        return ResponseEntity.created(createdUri).body(toDo);
+        WebMvcLinkBuilder selfLinkBuilder = linkTo(ToDoController.class).slash(toDo.getId());
+        URI createdUri = selfLinkBuilder.toUri();
+
+        // HATEOAS 적용
+        ToDoResource toDoResource = new ToDoResource(toDo);
+        toDoResource.add(linkTo(ToDoController.class).withRel("query-list"));
+        toDoResource.add(selfLinkBuilder.withRel("update"));
+        toDoResource.add(selfLinkBuilder.slash("status").withRel("status"));
+
+        return ResponseEntity.created(createdUri).body(toDoResource);
     }
 }

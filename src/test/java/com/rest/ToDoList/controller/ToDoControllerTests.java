@@ -52,6 +52,10 @@ public class ToDoControllerTests {
                 .andExpect(jsonPath("id").exists())
                 .andExpect(header().exists(HttpHeaders.LOCATION))
                 .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE))
+                .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("_links.query-list").exists())
+                .andExpect(jsonPath("_links.update").exists())
+                .andExpect(jsonPath("_links.status").exists())
         ;
     }
 
