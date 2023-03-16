@@ -17,7 +17,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -56,7 +60,41 @@ public class ToDoControllerTests {
                 .andExpect(jsonPath("_links.query-list").exists())
                 .andExpect(jsonPath("_links.update").exists())
                 .andExpect(jsonPath("_links.status").exists())
-                .andDo(document("create-ToDo"))
+                .andDo(document("create-ToDo",
+                                links(
+                                        linkWithRel("self").description("link to self"),
+                                        linkWithRel("query-list").description("link to query list"),
+                                        linkWithRel("update").description("link to update an existing ToDo"),
+                                        linkWithRel("status").description("link to change ToDo Status")
+                                ),
+                                requestHeaders(
+                                        headerWithName(HttpHeaders.ACCEPT).description("Accept Header"),
+                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("Content Type Header")
+                                ),
+                                requestFields(
+                                        fieldWithPath("name").description("Name of ToDo"),
+                                        fieldWithPath("description").description("Description of New ToDo"),
+                                        fieldWithPath("enrollmentDateTime").description("Date Time of Enrollment ToDo"),
+                                        fieldWithPath("endDateTime").description("Deadline for ToDo")
+                                ),
+                                responseHeaders(
+                                        headerWithName(HttpHeaders.LOCATION).description("Location Header"),
+                                        headerWithName(HttpHeaders.CONTENT_TYPE).description("Content Type")
+                                ),
+                                responseFields(
+                                        fieldWithPath("id").description("Identifier of New ToDo"),
+                                        fieldWithPath("name").description("Name of ToDo"),
+                                        fieldWithPath("description").description("Description of New ToDo"),
+                                        fieldWithPath("enrollmentDateTime").description("Date Time of Enrollment ToDo"),
+                                        fieldWithPath("endDateTime").description("Deadline for ToDo"),
+                                        fieldWithPath("toDoStatus").description("It Tells the current status of ToDo"),
+                                        fieldWithPath("_links.*").ignored(),
+                                        fieldWithPath("_links.self.*").ignored(),
+                                        fieldWithPath("_links.query-list.*").ignored(),
+                                        fieldWithPath("_links.update.*").ignored(),
+                                        fieldWithPath("_links.status.*").ignored()
+                                )
+                        ))
         ;
     }
 
