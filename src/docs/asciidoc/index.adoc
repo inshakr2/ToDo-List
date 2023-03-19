@@ -5,10 +5,13 @@ Chany;
 :source-highlighter: highlightjs
 :toc: left
 :toclevels: 4
-:sectlinks:
+:sectlinks: /build/asciidoc/html5/
 :operation-curl-request-title: Example request
 :operation-http-response-title: Example response
-
+ifndef::snippet[]
+:snippet: ../../../build/generated-snippets
+:root: ./
+endif::[]
 [[overview]]
 = 개요
 
@@ -60,17 +63,6 @@ Chany;
 | 요청한 리소스가 없음.
 |===
 
-[[overview-errors]]
-== 오류
-
-에러 응답이 발생했을 때 (상태 코드 >= 400), 본문에 해당 문제를 기술한 JSON 객체가 담겨있다. 에러 객체는 다음의 구조를 따른다.
-
-include::{snippets}/errors/response-fields.adoc[]
-
-예를 들어, 잘못된 요청으로 이벤트를 만들려고 했을 때 다음과 같은 `400 Bad Request` 응답을 받는다.
-
-include::{snippets}/errors/http-response.adoc[]
-
 [[overview-hypermedia]]
 == 하이퍼미디어
 
@@ -91,7 +83,6 @@ include::{snippets}/errors/http-response.adoc[]
 === 인덱스 조회
 
 `GET` 요청을 사용하여 인덱스에 접근할 수 있다.
-
 operation::index[snippets='response-body,http-response,links']
 
 [[resources-events]]
@@ -104,10 +95,10 @@ operation::index[snippets='response-body,http-response,links']
 
 `GET` 요청을 사용하여 서비스의 모든 ToDo-List를 조회할 수 있다.
 
-operation::get-events[snippets='response-fields,curl-request,http-response,links']
+operation::create-ToDo[snippets='response-fields,curl-request,http-response,links']
 
 [[resources-events-create]]
-=== 이벤트 생성
+=== ToDo-List 생성
 
 `POST` 요청을 사용해서 새 이벤트를 만들 수 있다.
 
@@ -118,11 +109,4 @@ operation::create-ToDo[snippets='request-fields,curl-request,http-request,reques
 
 `Get` 요청을 사용해서 기존 ToDo-List 하나를 조회할 수 있다.
 
-operation::get-event[snippets='request-fields,curl-request,http-response,links']
-
-[[resources-events-update]]
-=== ToDo-List 수정
-
-`PUT` 요청을 사용해서 기존 이벤트를 수정할 수 있다.
-
-operation::update-event[snippets='request-fields,curl-request,http-response,links']
+operation::create-ToDo[snippets='request-fields,curl-request,http-response,links']
