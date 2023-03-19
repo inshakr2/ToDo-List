@@ -1,6 +1,16 @@
 server:
   port: 28099
 
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
+
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
