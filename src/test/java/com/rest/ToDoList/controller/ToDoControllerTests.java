@@ -112,6 +112,7 @@ public class ToDoControllerTests {
                     .content(objectMapper.writeValueAsString(toDo)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("_links.index").exists())
         ;
     }
 
@@ -126,6 +127,7 @@ public class ToDoControllerTests {
                     .content(objectMapper.writeValueAsString(dto)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("_links.index").exists())
         ;
     }
 

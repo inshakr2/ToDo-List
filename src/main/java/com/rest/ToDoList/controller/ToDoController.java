@@ -3,6 +3,7 @@ package com.rest.ToDoList.controller;
 import com.rest.ToDoList.dto.ToDoDto;
 import com.rest.ToDoList.domain.ToDo;
 import com.rest.ToDoList.service.ToDoService;
+import com.rest.ToDoList.utils.ErrorsResource;
 import com.rest.ToDoList.utils.ToDoResource;
 import com.rest.ToDoList.utils.ToDoValidator;
 import lombok.RequiredArgsConstructor;
@@ -35,13 +36,13 @@ public class ToDoController {
     public ResponseEntity createToDo(@RequestBody @Valid ToDoDto toDoDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body(bindingResult);
+            return ResponseEntity.badRequest().body(new ErrorsResource(bindingResult));
         }
 
         toDoValidator.validate(toDoDto, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body(bindingResult);
+            return ResponseEntity.badRequest().body(new ErrorsResource(bindingResult));
         }
 
         ToDo toDo = toDoService.makeToDoList(toDoDto);
