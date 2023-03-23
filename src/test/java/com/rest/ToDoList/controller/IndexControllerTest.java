@@ -1,4 +1,4 @@
-package com.rest.ToDoList.index;
+package com.rest.ToDoList.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rest.ToDoList.common.RestDocConfiguration;
