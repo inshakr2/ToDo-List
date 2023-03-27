@@ -6,7 +6,14 @@ import com.rest.ToDoList.repository.ToDoRepository;
 import com.rest.ToDoList.service.ToDoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
+
+
 
 @Slf4j
 @Service
@@ -14,12 +21,22 @@ import org.springframework.stereotype.Service;
 public class ToDoServiceImpl implements ToDoService {
 
     private final ToDoRepository toDoRepository;
+    private final PagedResourcesAssembler<ToDo> assembler;
 
     @Override
     public ToDo makeToDoList(ToDoDto dto) {
 
         ToDo toDo = toDoRepository.save(ToDo.createTask(dto));
-        
+
         return toDo;
+    }
+
+    @Override
+    public PagedModel<EntityModel<ToDo>> pagingToDoList(Pageable pageable) {
+
+        Page<ToDo> page = toDoRepository.findAll(pageable);
+        PagedModel<EntityModel<ToDo>> entityModels = assembler.toModel(page);
+
+        return entityModels;
     }
 }

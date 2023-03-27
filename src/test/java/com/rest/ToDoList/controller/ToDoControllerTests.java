@@ -3,23 +3,30 @@ package com.rest.ToDoList.controller;
 import com.rest.ToDoList.common.BaseTestController;
 import com.rest.ToDoList.domain.ToDo;
 import com.rest.ToDoList.dto.ToDoDto;
+import com.rest.ToDoList.service.ToDoService;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
 import java.time.LocalDateTime;
+import java.util.stream.IntStream;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class ToDoControllerTests extends BaseTestController {
+
+    @Autowired
+    ToDoService toDoService;
 
     @Test
     public void createToDo() throws Exception {
@@ -78,6 +85,27 @@ public class ToDoControllerTests extends BaseTestController {
                                 )
                         ))
         ;
+    }
+
+    @Test
+    public void queryPagingToDo() throws Exception {
+
+        IntStream.range(0, 30).forEach(this::generateToDo);
+
+        this.mockMvc.perform(get("/api/todo")
+                .param("page", "1")
+                .param("size", "10")
+                .param("sort", "name,DESC")
+        )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("page").exists())
+        ;
+    }
+
+    private void generateToDo(int index) {
+        String idx = Integer.toString(index);
+        toDoService.makeToDoList(new ToDoDto("ToDo" + idx, "Test ToDo"));
     }
 
     @Test

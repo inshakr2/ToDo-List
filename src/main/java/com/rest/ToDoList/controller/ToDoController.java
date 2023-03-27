@@ -8,18 +8,21 @@ import com.rest.ToDoList.utils.ToDoResource;
 import com.rest.ToDoList.utils.ToDoValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.time.LocalDateTime;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
@@ -57,5 +60,12 @@ public class ToDoController {
         toDoResource.add(selfLinkBuilder.slash("status").withRel("status"));
 
         return ResponseEntity.created(createdUri).body(toDoResource);
+    }
+
+    @GetMapping
+    public ResponseEntity queryToDo(Pageable pageable) {
+        PagedModel<EntityModel<ToDo>> entityModels = toDoService.pagingToDoList(pageable);
+
+        return ResponseEntity.ok(entityModels);
     }
 }
