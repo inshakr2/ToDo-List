@@ -4,6 +4,7 @@ import com.rest.ToDoList.domain.ToDo;
 import com.rest.ToDoList.dto.ToDoDto;
 import com.rest.ToDoList.repository.ToDoRepository;
 import com.rest.ToDoList.service.ToDoService;
+import com.rest.ToDoList.utils.ToDoResource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -35,7 +36,7 @@ public class ToDoServiceImpl implements ToDoService {
     public PagedModel<EntityModel<ToDo>> pagingToDoList(Pageable pageable) {
 
         Page<ToDo> page = toDoRepository.findAll(pageable);
-        PagedModel<EntityModel<ToDo>> entityModels = assembler.toModel(page);
+        PagedModel<EntityModel<ToDo>> entityModels = assembler.toModel(page, e -> new ToDoResource(e));
 
         return entityModels;
     }

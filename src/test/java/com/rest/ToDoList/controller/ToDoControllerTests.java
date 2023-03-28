@@ -100,7 +100,11 @@ public class ToDoControllerTests extends BaseTestController {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("page").exists())
+                .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("_links.profile").exists())
+                .andDo(document("query-list"))
         ;
+
     }
 
     private void generateToDo(int index) {

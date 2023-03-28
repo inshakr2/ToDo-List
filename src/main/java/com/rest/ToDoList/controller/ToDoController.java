@@ -9,9 +9,7 @@ import com.rest.ToDoList.utils.ToDoValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.MediaTypes;
-import org.springframework.hateoas.PagedModel;
+import org.springframework.hateoas.*;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -64,7 +62,9 @@ public class ToDoController {
 
     @GetMapping
     public ResponseEntity queryToDo(Pageable pageable) {
+
         PagedModel<EntityModel<ToDo>> entityModels = toDoService.pagingToDoList(pageable);
+        entityModels.add(Link.of("/docs/index.html#resources-todo").withRel("profile"));
 
         return ResponseEntity.ok(entityModels);
     }

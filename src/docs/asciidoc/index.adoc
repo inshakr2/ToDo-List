@@ -9,7 +9,7 @@ Chany;
 :operation-curl-request-title: Example request
 :operation-http-response-title: Example response
 ifndef::snippet[]
-:snippet: ../../../build/generated-snippets
+:snippet: /build/generated-snippets/
 :root: ./
 endif::[]
 [[overview]]
@@ -85,26 +85,26 @@ endif::[]
 `GET` 요청을 사용하여 인덱스에 접근할 수 있다.
 operation::index[snippets='response-body,http-response,links']
 
-[[resources-events]]
-== 이벤트
+[[resources-todo]]
+== ToDo List
 
 이벤트 리소스는 이벤트를 만들거나 조회할 때 사용한다.
 
-[[resources-events-list]]
+[[resources-todo-list]]
 === ToDo-List 목록 조회
 
 `GET` 요청을 사용하여 서비스의 모든 ToDo-List를 조회할 수 있다.
 
 operation::create-ToDo[snippets='response-fields,curl-request,http-response,links']
 
-[[resources-events-create]]
+[[resources-todo-create]]
 === ToDo-List 생성
 
 `POST` 요청을 사용해서 새 이벤트를 만들 수 있다.
 
 operation::create-ToDo[snippets='request-fields,curl-request,http-request,request-headers,http-response,response-headers,response-fields,links']
 
-[[resources-events-get]]
+[[resources-todo-get]]
 === ToDo-List 조회
 
 `Get` 요청을 사용해서 기존 ToDo-List 하나를 조회할 수 있다.
