@@ -56,6 +56,7 @@ public class ToDoController {
         toDoResource.add(linkTo(ToDoController.class).withRel("query-list"));
         toDoResource.add(selfLinkBuilder.withRel("update"));
         toDoResource.add(selfLinkBuilder.slash("status").withRel("status"));
+        toDoResource.add(Link.of("/docs/index.html#resources-todo-create").withRel("profile"));
 
         return ResponseEntity.created(createdUri).body(toDoResource);
     }
@@ -64,7 +65,7 @@ public class ToDoController {
     public ResponseEntity queryToDo(Pageable pageable) {
 
         PagedModel<EntityModel<ToDo>> entityModels = toDoService.pagingToDoList(pageable);
-        entityModels.add(Link.of("/docs/index.html#resources-todo").withRel("profile"));
+        entityModels.add(Link.of("/docs/index.html#resources-todo-list").withRel("profile"));
 
         return ResponseEntity.ok(entityModels);
     }

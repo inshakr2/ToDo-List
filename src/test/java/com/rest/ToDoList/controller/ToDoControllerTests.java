@@ -49,12 +49,14 @@ public class ToDoControllerTests extends BaseTestController {
                 .andExpect(jsonPath("_links.query-list").exists())
                 .andExpect(jsonPath("_links.update").exists())
                 .andExpect(jsonPath("_links.status").exists())
+                .andExpect(jsonPath("_links.profile").exists())
                 .andDo(document("create-ToDo",
                                 links(
                                         linkWithRel("self").description("link to self"),
                                         linkWithRel("query-list").description("link to query list"),
                                         linkWithRel("update").description("link to update an existing ToDo"),
-                                        linkWithRel("status").description("link to change ToDo Status")
+                                        linkWithRel("status").description("link to change ToDo Status"),
+                                        linkWithRel("profile").description("link to profile")
                                 ),
                                 requestHeaders(
                                         headerWithName(HttpHeaders.ACCEPT).description("Accept Header"),
@@ -81,7 +83,8 @@ public class ToDoControllerTests extends BaseTestController {
                                         fieldWithPath("_links.self.*").ignored(),
                                         fieldWithPath("_links.query-list.*").ignored(),
                                         fieldWithPath("_links.update.*").ignored(),
-                                        fieldWithPath("_links.status.*").ignored()
+                                        fieldWithPath("_links.status.*").ignored(),
+                                        fieldWithPath("_links.profile.*").ignored()
                                 )
                         ))
         ;
