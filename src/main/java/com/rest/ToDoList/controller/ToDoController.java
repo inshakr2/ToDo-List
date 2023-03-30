@@ -14,10 +14,7 @@ import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -59,6 +56,21 @@ public class ToDoController {
         toDoResource.add(Link.of("/docs/index.html#resources-todo-create").withRel("profile"));
 
         return ResponseEntity.created(createdUri).body(toDoResource);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity getToDo(@PathVariable Long id) {
+
+        ToDo entity = toDoService.findToDoById(id);
+
+        if (entity == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        ToDoResource toDoResource = new ToDoResource(entity);
+        toDoResource.add(Link.of("/docs/index.html#resources-todo-get").withRel("profile"));
+        return ResponseEntity.ok(toDoResource);
+
     }
 
     @GetMapping

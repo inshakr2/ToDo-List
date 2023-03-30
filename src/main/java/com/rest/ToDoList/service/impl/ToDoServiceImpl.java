@@ -14,6 +14,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 
 
 @Slf4j
@@ -39,5 +40,19 @@ public class ToDoServiceImpl implements ToDoService {
         PagedModel<EntityModel<ToDo>> entityModels = assembler.toModel(page, e -> new ToDoResource(e));
 
         return entityModels;
+    }
+
+    @Override
+    public ToDo findToDoById(Long id) {
+
+        Optional<ToDo> optionalToDo = toDoRepository.findById(id);
+
+        if (optionalToDo.isEmpty()) {
+            return null;
+        } else {
+
+            return optionalToDo.get();
+        }
+
     }
 }
