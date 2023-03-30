@@ -110,9 +110,22 @@ public class ToDoControllerTests extends BaseTestController {
 
     }
 
-    private void generateToDo(int index) {
+    @Test
+    public void getToDo() throws Exception {
+        ToDo toDo = this.generateToDo(100);
+
+        this.mockMvc.perform(get("/api/todo/{id}", toDo.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("name").exists())
+                .andExpect(jsonPath("id").exists())
+                .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("_links.profile").exists())
+                ;
+    }
+
+    private ToDo generateToDo(int index) {
         String idx = Integer.toString(index);
-        toDoService.makeToDoList(new ToDoDto("ToDo" + idx, "Test ToDo"));
+        return toDoService.makeToDoList(new ToDoDto("ToDo" + idx, "Test ToDo"));
     }
 
     @Test
