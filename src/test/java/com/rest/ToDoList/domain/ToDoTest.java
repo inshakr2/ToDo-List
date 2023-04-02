@@ -1,6 +1,7 @@
 package com.rest.ToDoList.domain;
 
 import com.rest.ToDoList.dto.ToDoDto;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -14,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ToDoTest {
 
     @Test
+    @DisplayName("단순 ToDo Entity 생성")
     public void createTask() {
         ToDoDto dto = new ToDoDto("Test ToDo List", "Just Test");
         ToDo toDo = ToDo.createTask(dto);
@@ -24,6 +26,7 @@ class ToDoTest {
 
     @ParameterizedTest
     @MethodSource
+    @DisplayName("단순 ToDo Entity 생성 (with parameterized)")
     public void testParams(String name, String description, LocalDateTime begin) {
 
         ToDoDto dto = new ToDoDto(name, description, begin, begin.plusYears(100));

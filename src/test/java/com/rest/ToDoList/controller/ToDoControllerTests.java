@@ -4,6 +4,7 @@ import com.rest.ToDoList.common.BaseTestController;
 import com.rest.ToDoList.domain.ToDo;
 import com.rest.ToDoList.dto.ToDoDto;
 import com.rest.ToDoList.service.ToDoService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
@@ -29,6 +30,7 @@ public class ToDoControllerTests extends BaseTestController {
     ToDoService toDoService;
 
     @Test
+    @DisplayName("[200] ToDo 단건 생성")
     public void createToDo() throws Exception {
 
         ToDoDto dto = new ToDoDto("Test ToDo List", "Test");
@@ -91,6 +93,7 @@ public class ToDoControllerTests extends BaseTestController {
     }
 
     @Test
+    @DisplayName("[200] ToDo를 30건 생성하고, 페이징 처리")
     public void queryPagingToDo() throws Exception {
 
         IntStream.range(0, 30).forEach(this::generateToDo);
@@ -111,6 +114,7 @@ public class ToDoControllerTests extends BaseTestController {
     }
 
     @Test
+    @DisplayName("[200] ToDo 단건 조회")
     public void getToDo() throws Exception {
         ToDo toDo = this.generateToDo(100);
 
@@ -129,6 +133,7 @@ public class ToDoControllerTests extends BaseTestController {
     }
 
     @Test
+    @DisplayName("[400] ToDo 생성 : Request Body 오류")
     public void createToDo_Bad_Request_Out_Of_DtoValue() throws Exception {
 
         ToDoDto dto = new ToDoDto("Test ToDo List", "Test" );
@@ -145,6 +150,7 @@ public class ToDoControllerTests extends BaseTestController {
     }
 
     @Test
+    @DisplayName("[400] ToDo 생성 : Request Body 빈값")
     public void createToDo_Bad_Request_Empty_Input() throws Exception {
 
         ToDoDto dto = new ToDoDto();
@@ -160,6 +166,7 @@ public class ToDoControllerTests extends BaseTestController {
     }
 
     @Test
+    @DisplayName("[400] ToDo 생성 : Request 필드 Validation 오류")
     public void createToDo_Bad_Request_Wrong_Input() throws Exception {
 
         ToDoDto dto = new ToDoDto("Test ToDo List", "Test",
