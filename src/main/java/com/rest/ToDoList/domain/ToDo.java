@@ -40,4 +40,13 @@ public class ToDo {
 
         return toDo;
     }
+
+    public void updateTask(ToDoDto dto) {
+
+        this.name = dto.getName();
+        this.description = dto.getDescription();
+        this.enrollmentDateTime = dto.getEnrollmentDateTime();
+        this.endDateTime = dto.getEndDateTime();
+
+    }
 }

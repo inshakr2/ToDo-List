@@ -30,6 +30,7 @@ public class ToDoController {
     private final ToDoService toDoService;
     private final ToDoValidator toDoValidator;
 
+
     @PostMapping
     public ResponseEntity createToDo(@RequestBody @Valid ToDoDto toDoDto, BindingResult bindingResult) {
 
@@ -71,6 +72,28 @@ public class ToDoController {
         toDoResource.add(Link.of("/docs/index.html#resources-todo-get").withRel("profile"));
         return ResponseEntity.ok(toDoResource);
 
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity updateToDo(@PathVariable Long id,
+                                     @RequestBody @Valid ToDoDto toDoDto, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(new ErrorsResource(bindingResult));
+        }
+
+        toDoValidator.validate(toDoDto, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body(new ErrorsResource(bindingResult));
+        }
+
+        ToDo updatedToDo = toDoService.updateToDo(id, toDoDto);
+
+        ToDoResource toDoResource = new ToDoResource(updatedToDo);
+        toDoResource.add(Link.of("/docs/index.html#resources-todo-update").withRel("profile"));
+
+        return ResponseEntity.ok(toDoResource);
     }
 
     @GetMapping

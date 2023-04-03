@@ -15,4 +15,6 @@ public interface ToDoService {
     PagedModel<EntityModel<ToDo>> pagingToDoList(Pageable pageable);
 
     ToDo findToDoById(Long id);
+
+    ToDo updateToDo(Long id, ToDoDto toDoDto);
 }

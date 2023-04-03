@@ -19,8 +19,7 @@ import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.li
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -30,7 +29,7 @@ public class ToDoControllerTests extends BaseTestController {
     ToDoService toDoService;
 
     @Test
-    @DisplayName("[200] ToDo 단건 생성")
+    @DisplayName("[201] ToDo 단건 생성")
     public void createToDo() throws Exception {
 
         ToDoDto dto = new ToDoDto("Test ToDo List", "Test");
@@ -122,6 +121,24 @@ public class ToDoControllerTests extends BaseTestController {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("name").exists())
                 .andExpect(jsonPath("id").exists())
+                .andExpect(jsonPath("_links.self").exists())
+                .andExpect(jsonPath("_links.profile").exists())
+                ;
+    }
+
+    @Test
+    @DisplayName("[200] ToDo 수정")
+    public void updateToDo() throws Exception {
+        ToDo toDo = this.generateToDo(200);
+
+        String update = "Update";
+        ToDoDto dto = new ToDoDto(update, update);
+        this.mockMvc.perform(put("/api/todo/{id}", toDo.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(objectMapper.writeValueAsString(dto)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("name").value(update))
                 .andExpect(jsonPath("_links.self").exists())
                 .andExpect(jsonPath("_links.profile").exists())
                 ;
