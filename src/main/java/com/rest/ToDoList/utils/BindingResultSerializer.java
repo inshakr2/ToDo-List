@@ -16,6 +16,7 @@ public class BindingResultSerializer extends JsonSerializer<BindingResult> {
 
         bindingResult.getFieldErrors().stream().forEach(e -> {
             try {
+                jsonGenerator.writeFieldName("BindingResult");
                 jsonGenerator.writeStartObject();
                 jsonGenerator.writeStringField("field",e.getField());
                 jsonGenerator.writeStringField("objectName",e.getObjectName());
