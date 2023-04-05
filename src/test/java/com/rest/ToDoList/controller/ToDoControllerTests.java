@@ -3,6 +3,7 @@ package com.rest.ToDoList.controller;
 import com.rest.ToDoList.common.BaseTestController;
 import com.rest.ToDoList.domain.ToDo;
 import com.rest.ToDoList.dto.ToDoDto;
+import com.rest.ToDoList.dto.ToDoUpdateRequest;
 import com.rest.ToDoList.service.ToDoService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -149,57 +150,71 @@ public class ToDoControllerTests extends BaseTestController {
         }
     }
 
-    @Test
-    @DisplayName("[200] ToDo를 30건 생성하고, 페이징 처리")
-    public void queryPagingToDo() throws Exception {
+    @Nested
+    @DisplayName("ToDo 조회")
+    class query {
 
-        IntStream.range(0, 30).forEach(this::generateToDo);
+        @Test
+        @DisplayName("[200] ToDo를 30건 생성하고, 페이징 처리")
+        public void queryPagingToDo() throws Exception {
 
-        this.mockMvc.perform(get("/api/todo")
-                .param("page", "1")
-                .param("size", "10")
-                .param("sort", "name,DESC")
-        )
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("page").exists())
-                .andExpect(jsonPath("_links.self").exists())
-                .andExpect(jsonPath("_links.profile").exists())
-                .andDo(document("query-list"))
-        ;
+            IntStream.range(0, 30).forEach(ToDoControllerTests.this::generateToDo);
 
+            mockMvc.perform(get("/api/todo")
+                    .param("page", "1")
+                    .param("size", "10")
+                    .param("sort", "name,DESC")
+            )
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("page").exists())
+                    .andExpect(jsonPath("_links.self").exists())
+                    .andExpect(jsonPath("_links.profile").exists())
+                    .andDo(document("query-list"))
+            ;
+
+        }
+
+        @Test
+        @DisplayName("[200] ToDo 단건 조회")
+        public void getToDo() throws Exception {
+            ToDo toDo = generateToDo(100);
+
+            mockMvc.perform(get("/api/todo/{id}", toDo.getId()))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("name").exists())
+                    .andExpect(jsonPath("id").exists())
+                    .andExpect(jsonPath("_links.self").exists())
+                    .andExpect(jsonPath("_links.profile").exists())
+            ;
+        }
     }
 
-    @Test
-    @DisplayName("[200] ToDo 단건 조회")
-    public void getToDo() throws Exception {
-        ToDo toDo = this.generateToDo(100);
+    @Nested
+    @DisplayName("ToDo 수정")
+    class update{
 
-        this.mockMvc.perform(get("/api/todo/{id}", toDo.getId()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("name").exists())
-                .andExpect(jsonPath("id").exists())
-                .andExpect(jsonPath("_links.self").exists())
-                .andExpect(jsonPath("_links.profile").exists())
-                ;
-    }
+        @Test
+        @DisplayName("[200] ToDo 단건 수정 : name / description")
+        public void updateToDo() throws Exception {
+            ToDo toDo = generateToDo(200);
 
-    @Test
-    @DisplayName("[200] ToDo 수정")
-    public void updateToDo() throws Exception {
-        ToDo toDo = this.generateToDo(200);
-
-        String update = "Update";
-        ToDoDto dto = new ToDoDto(update, update);
-        this.mockMvc.perform(put("/api/todo/{id}", toDo.getId())
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(dto)))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("name").value(update))
-                .andExpect(jsonPath("_links.self").exists())
-                .andExpect(jsonPath("_links.profile").exists())
-                ;
+            String update = "Update";
+            ToDoUpdateRequest dto = new ToDoUpdateRequest(update, update);
+            System.out.println(toDo.getEndDateTime().toString());
+            mockMvc.perform(put("/api/todo/{id}", toDo.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(dto)))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("name").value(update))
+                    .andExpect(jsonPath("enrollmentDateTime").value(toDo.getEnrollmentDateTime().toString()))
+                    .andExpect(jsonPath("endDateTime").value(toDo.getEndDateTime().toString() + ":00"))
+                    .andExpect(jsonPath("toDoStatus").value(toDo.getToDoStatus().toString()))
+                    .andExpect(jsonPath("_links.self").exists())
+                    .andExpect(jsonPath("_links.profile").exists())
+            ;
+        }
     }
 
     private ToDo generateToDo(int index) {

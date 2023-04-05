@@ -2,6 +2,7 @@ package com.rest.ToDoList.service.impl;
 
 import com.rest.ToDoList.domain.ToDo;
 import com.rest.ToDoList.dto.ToDoDto;
+import com.rest.ToDoList.dto.ToDoUpdateRequest;
 import com.rest.ToDoList.repository.ToDoRepository;
 import com.rest.ToDoList.service.ToDoService;
 import com.rest.ToDoList.utils.ToDoResource;
@@ -61,7 +62,7 @@ public class ToDoServiceImpl implements ToDoService {
     }
 
     @Override
-    public ToDo updateToDo(Long id, ToDoDto toDoDto) {
+    public ToDo updateToDo(Long id, ToDoUpdateRequest toDoUpdateRequest) {
 
         Optional<ToDo> optionalToDo = toDoRepository.findById(id);
 
@@ -70,9 +71,9 @@ public class ToDoServiceImpl implements ToDoService {
         }
 
         ToDo toDo = optionalToDo.get();
-        toDo.updateTask(toDoDto);
+        toDo.updateTask(toDoUpdateRequest);
 
-        toDoRepository.save(toDo);
+//        toDoRepository.save(toDo);
 
         return toDo;
     }

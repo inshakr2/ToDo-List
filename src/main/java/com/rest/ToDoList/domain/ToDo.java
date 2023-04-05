@@ -1,10 +1,12 @@
 package com.rest.ToDoList.domain;
 
 import com.rest.ToDoList.dto.ToDoDto;
+import com.rest.ToDoList.dto.ToDoUpdateRequest;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,6 +16,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Getter @Entity
 @Setter(PROTECTED)
+@DynamicUpdate
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor(access = PROTECTED)
 public class ToDo {
@@ -41,12 +44,19 @@ public class ToDo {
         return toDo;
     }
 
-    public void updateTask(ToDoDto dto) {
+    public void updateTask(ToDoUpdateRequest dto) {
 
-        this.name = dto.getName();
-        this.description = dto.getDescription();
-        this.enrollmentDateTime = dto.getEnrollmentDateTime();
-        this.endDateTime = dto.getEndDateTime();
+        if (dto.getName() != null && !dto.getName().isBlank()) {
+            this.name = dto.getName();
+        }
+
+        if (dto.getDescription() != null && !dto.getDescription().isBlank()) {
+            this.description = dto.getDescription();
+        }
+
+        if (dto.getEndDateTime() != null) {
+            this.endDateTime = dto.getEndDateTime();
+        }
 
     }
 }

@@ -2,6 +2,7 @@ package com.rest.ToDoList.controller;
 
 import com.rest.ToDoList.dto.ToDoDto;
 import com.rest.ToDoList.domain.ToDo;
+import com.rest.ToDoList.dto.ToDoUpdateRequest;
 import com.rest.ToDoList.service.ToDoService;
 import com.rest.ToDoList.utils.ErrorsResource;
 import com.rest.ToDoList.utils.ToDoResource;
@@ -76,19 +77,9 @@ public class ToDoController {
 
     @PutMapping("/{id}")
     public ResponseEntity updateToDo(@PathVariable Long id,
-                                     @RequestBody @Valid ToDoDto toDoDto, BindingResult bindingResult) {
+                                     @RequestBody ToDoUpdateRequest toDoUpdateRequest) {
 
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body(new ErrorsResource(bindingResult));
-        }
-
-        toDoValidator.validate(toDoDto, bindingResult);
-
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body(new ErrorsResource(bindingResult));
-        }
-
-        ToDo updatedToDo = toDoService.updateToDo(id, toDoDto);
+        ToDo updatedToDo = toDoService.updateToDo(id, toDoUpdateRequest);
 
         ToDoResource toDoResource = new ToDoResource(updatedToDo);
         toDoResource.add(Link.of("/docs/index.html#resources-todo-update").withRel("profile"));
