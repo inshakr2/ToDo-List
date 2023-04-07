@@ -81,6 +81,10 @@ public class ToDoController {
 
         ToDo updatedToDo = toDoService.updateToDo(id, toDoUpdateRequest);
 
+        if (updatedToDo == null) {
+            return ResponseEntity.notFound().build();
+        }
+
         ToDoResource toDoResource = new ToDoResource(updatedToDo);
         toDoResource.add(Link.of("/docs/index.html#resources-todo-update").withRel("profile"));
 

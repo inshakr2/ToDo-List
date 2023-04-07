@@ -189,6 +189,18 @@ public class ToDoControllerTests extends BaseTestController {
                     .andDo(document("get-ToDo"))
             ;
         }
+
+        @Test
+        @DisplayName("[404] 존재하지 않는 ToDo")
+        public void notFoundToDo() throws Exception{
+
+            ToDo toDo = generateToDo(100);
+
+            mockMvc.perform(get("/api/todo/{id}", toDo.getId() + 1))
+                    .andDo(print())
+                    .andExpect(status().isNotFound())
+            ;
+        }
     }
 
     @Nested
@@ -238,6 +250,22 @@ public class ToDoControllerTests extends BaseTestController {
                     .andExpect(jsonPath("toDoStatus").value(toDo.getToDoStatus().toString()))
                     .andExpect(jsonPath("_links.self").exists())
                     .andExpect(jsonPath("_links.profile").exists())
+            ;
+        }
+
+        @Test
+        @DisplayName("[404] 존재하지 않는 ToDo")
+        public void notFoundToDo() throws Exception{
+            ToDo toDo = generateToDo(200);
+            LocalDateTime deadline = LocalDateTime.of(2123, 1, 1, 00, 00, 00);
+            String update = "Update";
+            ToDoUpdateRequest dto = new ToDoUpdateRequest(update, update, deadline);
+            System.out.println(toDo.getEndDateTime().toString());
+            mockMvc.perform(put("/api/todo/{id}", toDo.getId() + 1)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(dto)))
+                    .andDo(print())
+                    .andExpect(status().isNotFound())
             ;
         }
     }
