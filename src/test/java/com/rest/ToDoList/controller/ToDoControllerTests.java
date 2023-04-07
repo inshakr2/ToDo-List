@@ -186,6 +186,7 @@ public class ToDoControllerTests extends BaseTestController {
                     .andExpect(jsonPath("id").exists())
                     .andExpect(jsonPath("_links.self").exists())
                     .andExpect(jsonPath("_links.profile").exists())
+                    .andDo(document("get-ToDo"))
             ;
         }
     }
@@ -210,6 +211,30 @@ public class ToDoControllerTests extends BaseTestController {
                     .andExpect(jsonPath("name").value(update))
                     .andExpect(jsonPath("enrollmentDateTime").value(toDo.getEnrollmentDateTime().toString()))
                     .andExpect(jsonPath("endDateTime").value(toDo.getEndDateTime().toString() + ":00"))
+                    .andExpect(jsonPath("toDoStatus").value(toDo.getToDoStatus().toString()))
+                    .andExpect(jsonPath("_links.self").exists())
+                    .andExpect(jsonPath("_links.profile").exists())
+                    .andDo(document("query-list"))
+            ;
+        }
+
+        @Test
+        @DisplayName("[200] ToDo 단건 수정 : name / description / endTime")
+        public void updateToDoAllFields() throws Exception {
+
+            ToDo toDo = generateToDo(200);
+            LocalDateTime deadline = LocalDateTime.of(2123, 1, 1, 00, 00, 00);
+            String update = "Update";
+            ToDoUpdateRequest dto = new ToDoUpdateRequest(update, update, deadline);
+            System.out.println(toDo.getEndDateTime().toString());
+            mockMvc.perform(put("/api/todo/{id}", toDo.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(dto)))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("name").value(update))
+                    .andExpect(jsonPath("enrollmentDateTime").value(toDo.getEnrollmentDateTime().toString()))
+                    .andExpect(jsonPath("endDateTime").value(deadline.toString() + ":00"))
                     .andExpect(jsonPath("toDoStatus").value(toDo.getToDoStatus().toString()))
                     .andExpect(jsonPath("_links.self").exists())
                     .andExpect(jsonPath("_links.profile").exists())
