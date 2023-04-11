@@ -41,7 +41,7 @@ public class ToDoDto {
 
 
         DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-        String midnight = LocalDate.now().atStartOfDay().format(pattern);
+        String midnight = LocalDate.now().plusDays(1).atStartOfDay().format(pattern);
 
         return LocalDateTime.parse(midnight);
     }
