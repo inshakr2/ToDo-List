@@ -1,5 +1,6 @@
 package com.rest.ToDoList.controller;
 
+import com.rest.ToDoList.domain.ToDoStatus;
 import com.rest.ToDoList.dto.ToDoDto;
 import com.rest.ToDoList.domain.ToDo;
 import com.rest.ToDoList.dto.ToDoUpdateRequest;
@@ -87,6 +88,21 @@ public class ToDoController {
 
         ToDoResource toDoResource = new ToDoResource(updatedToDo);
         toDoResource.add(Link.of("/docs/index.html#resources-todo-update").withRel("profile"));
+
+        return ResponseEntity.ok(toDoResource);
+    }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity changeStatus(@PathVariable Long id) {
+
+        ToDo toDo = toDoService.changeToDoStatus(id);
+
+        if (toDo == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        ToDoResource toDoResource = new ToDoResource(toDo);
+        toDoResource.add(Link.of("/docs/index.html#resources-todo-status-change").withRel("profile"));
 
         return ResponseEntity.ok(toDoResource);
     }

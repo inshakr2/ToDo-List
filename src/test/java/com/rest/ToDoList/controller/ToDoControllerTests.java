@@ -2,6 +2,7 @@ package com.rest.ToDoList.controller;
 
 import com.rest.ToDoList.common.BaseTestController;
 import com.rest.ToDoList.domain.ToDo;
+import com.rest.ToDoList.domain.ToDoStatus;
 import com.rest.ToDoList.dto.ToDoDto;
 import com.rest.ToDoList.dto.ToDoUpdateRequest;
 import com.rest.ToDoList.service.ToDoService;
@@ -248,6 +249,29 @@ public class ToDoControllerTests extends BaseTestController {
                     .andExpect(jsonPath("enrollmentDateTime").value(toDo.getEnrollmentDateTime().toString()))
                     .andExpect(jsonPath("endDateTime").value(deadline.toString() + ":00"))
                     .andExpect(jsonPath("toDoStatus").value(toDo.getToDoStatus().toString()))
+                    .andExpect(jsonPath("_links.self").exists())
+                    .andExpect(jsonPath("_links.profile").exists())
+            ;
+        }
+
+        @Test
+        @DisplayName("[200] ToDo 단건 수정 : status")
+        public void changeToDoStatus() throws Exception {
+
+            ToDo toDo = generateToDo(200);
+            String status = toDo.getToDoStatus().toString();
+
+            String assertStatus;
+            if (toDo.getToDoStatus() == ToDoStatus.TODO) {
+                assertStatus = ToDoStatus.FINISHED.toString();
+            } else {
+                assertStatus = ToDoStatus.TODO.toString();
+            }
+
+            mockMvc.perform(put("/api/todo/{id}/status", toDo.getId()))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("toDoStatus").value(assertStatus))
                     .andExpect(jsonPath("_links.self").exists())
                     .andExpect(jsonPath("_links.profile").exists())
             ;

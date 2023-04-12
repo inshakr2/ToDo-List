@@ -77,4 +77,19 @@ public class ToDoServiceImpl implements ToDoService {
 
         return toDo;
     }
+
+    @Override
+    public ToDo changeToDoStatus(Long id) {
+
+        Optional<ToDo> optionalToDo = toDoRepository.findById(id);
+
+        if (optionalToDo.isEmpty()) {
+            return null;
+        }
+
+        ToDo toDo = optionalToDo.get();
+        toDo.doneOrUnDone();
+
+        return toDo;
+    }
 }

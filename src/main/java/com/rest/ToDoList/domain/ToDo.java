@@ -59,4 +59,12 @@ public class ToDo {
         }
 
     }
+
+    public void doneOrUnDone() {
+        if (this.toDoStatus == ToDoStatus.TODO) {
+            this.toDoStatus = ToDoStatus.FINISHED;
+        } else {
+            this.toDoStatus = ToDoStatus.TODO;
+        }
+    }
 }

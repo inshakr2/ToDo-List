@@ -111,3 +111,7 @@ operation::create-ToDo[snippets='request-fields,curl-request,http-request,reques
 
 operation::get-ToDo[snippets='request-fields,curl-request,http-response,links']
 
+[[resources-todo-status-change]]
+=== ToDo 상태값 변경
+
+`PUT` 요청을 통해 기존 ToDo의 상태 값을 변경한다.
