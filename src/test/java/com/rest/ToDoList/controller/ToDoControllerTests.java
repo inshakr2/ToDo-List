@@ -215,7 +215,6 @@ public class ToDoControllerTests extends BaseTestController {
 
             String update = "Update";
             ToDoUpdateRequest dto = new ToDoUpdateRequest(update, update);
-            System.out.println(toDo.getEndDateTime().toString());
             mockMvc.perform(put("/api/todo/{id}", toDo.getId())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(dto)))
@@ -290,6 +289,24 @@ public class ToDoControllerTests extends BaseTestController {
                     .content(objectMapper.writeValueAsString(dto)))
                     .andDo(print())
                     .andExpect(status().isNotFound())
+            ;
+        }
+    }
+
+    @Nested
+    @DisplayName("ToDo 삭제")
+    class delete{
+
+        @Test
+        @DisplayName("[200] ToDo 단건 삭제")
+        public void deleteToDo() throws Exception {
+            ToDo toDo = generateToDo(300);
+
+            mockMvc.perform(delete("/api/todo/{id}", toDo.getId()))
+                    .andExpect(status().isOk())
+//                    .andExpect(jsonPath("_links.self").exists())
+//                    .andExpect(jsonPath("_links.profile").exists())
+                    .andDo(document("delete-ToDo"))
             ;
         }
     }

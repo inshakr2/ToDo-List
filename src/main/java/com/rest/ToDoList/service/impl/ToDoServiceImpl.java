@@ -92,4 +92,18 @@ public class ToDoServiceImpl implements ToDoService {
 
         return toDo;
     }
+
+    @Override
+    public int deleteToDo(Long id) {
+
+        Optional<ToDo> optionalToDo = toDoRepository.findById(id);
+
+        if (optionalToDo.isEmpty()) {
+            return 0;
+        }
+
+        toDoRepository.deleteById(id);
+
+        return 0;
+    }
 }

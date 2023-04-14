@@ -21,4 +21,6 @@ public interface ToDoService {
     ToDo updateToDo(Long id, ToDoUpdateRequest toDoUpdateRequest);
 
     ToDo changeToDoStatus(Long id);
+
+    int deleteToDo(Long id);
 }

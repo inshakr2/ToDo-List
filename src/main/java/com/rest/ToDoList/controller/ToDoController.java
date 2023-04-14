@@ -115,4 +115,16 @@ public class ToDoController {
 
         return ResponseEntity.ok(entityModels);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteToDo(@PathVariable Long id) {
+
+        int result = toDoService.deleteToDo(id);
+
+        if (result == 0) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok().build();
+    }
 }
