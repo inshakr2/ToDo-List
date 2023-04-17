@@ -32,6 +32,9 @@ public class ToDo {
     @Enumerated(EnumType.STRING)
     private ToDoStatus toDoStatus;
 
+    @ManyToOne
+    private Account owner;
+
     public static ToDo createTask(ToDoDto dto) {
 
         ToDo toDo = new ToDo();
