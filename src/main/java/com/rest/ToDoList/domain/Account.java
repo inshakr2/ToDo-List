@@ -28,4 +28,13 @@ public class Account {
     @Enumerated(EnumType.STRING)
     private Set<AccountRole> roles;
 
+    public static Account join(String email, String password, Set<AccountRole> roles) {
+
+        Account account = new Account();
+        account.setEmail(email);
+        account.setPassword(password);
+        account.setRoles(roles);
+
+        return account;
+    }
 }
