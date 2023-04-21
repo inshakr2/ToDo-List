@@ -15,6 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest
@@ -59,6 +60,16 @@ public class AccountServiceTest {
         } catch (UsernameNotFoundException e) {
             assertThat(e.getMessage()).containsSequence(username);
         }
+    }
+
+    @Test
+    public void findByUsernameFail2() {
+        String username = "foo@naver.com";
+
+        UsernameNotFoundException exception = assertThrows(UsernameNotFoundException.class,
+                                        () -> accountService.loadUserByUsername(username));
+        assertThat(exception).hasMessageContaining(username);
+
     }
 
 }
