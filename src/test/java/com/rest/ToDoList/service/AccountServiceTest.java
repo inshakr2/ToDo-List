@@ -3,17 +3,19 @@ package com.rest.ToDoList.service;
 import com.rest.ToDoList.domain.Account;
 import com.rest.ToDoList.domain.AccountRole;
 import com.rest.ToDoList.repository.AccountRepository;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -45,6 +47,18 @@ public class AccountServiceTest {
         // then
         assertThat(userDetails.getPassword()).isEqualTo(password);
 
+    }
+
+    @Test
+    public void findByUsernameFail1() {
+        String username = "foo@naver.com";
+
+        try {
+            accountService.loadUserByUsername(username);
+            fail("supposed to be failed");
+        } catch (UsernameNotFoundException e) {
+            assertThat(e.getMessage()).containsSequence(username);
+        }
     }
 
 }
