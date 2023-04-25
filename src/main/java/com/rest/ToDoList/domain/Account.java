@@ -37,4 +37,10 @@ public class Account {
 
         return account;
     }
+
+    public Account encodePassword(String encodedPassword) {
+        this.password = encodedPassword;
+
+        return this;
+    }
 }
