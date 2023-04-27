@@ -26,8 +26,8 @@ public class AuthServerConfigTest extends BaseTestController {
     @DisplayName("인증 토큰 발급 테스트")
     public void getAuthToken() throws Exception{
 
-        String username = "chany@email.com";
-        String password = "chany";
+        String username = "test@email.com";
+        String password = "test";
         Account account = Account.join(username, password,
                 Set.of(AccountRole.ADMIN, AccountRole.USER));
         accountService.saveAccount(account);
