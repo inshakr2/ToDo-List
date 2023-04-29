@@ -1,11 +1,16 @@
 package com.rest.ToDoList.controller;
 
 import com.rest.ToDoList.common.BaseTestController;
+import com.rest.ToDoList.domain.Account;
+import com.rest.ToDoList.domain.AccountRole;
 import com.rest.ToDoList.domain.ToDo;
 import com.rest.ToDoList.domain.ToDoStatus;
 import com.rest.ToDoList.dto.ToDoDto;
 import com.rest.ToDoList.dto.ToDoUpdateRequest;
+import com.rest.ToDoList.repository.AccountRepository;
+import com.rest.ToDoList.service.AccountService;
 import com.rest.ToDoList.service.ToDoService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -13,8 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.oauth2.common.util.Jackson2JsonParser;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
@@ -22,6 +31,7 @@ import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.li
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -30,6 +40,17 @@ public class ToDoControllerTests extends BaseTestController {
 
     @Autowired
     ToDoService toDoService;
+
+    @Autowired
+    AccountService accountService;
+
+    @Autowired
+    AccountRepository accountRepository;
+
+    @BeforeEach
+    public void initializeRepository() {
+        accountRepository.deleteAll();
+    }
 
     @Nested
     @DisplayName("ToDo 생성")
@@ -46,9 +67,10 @@ public class ToDoControllerTests extends BaseTestController {
 //        Mockito.when(toDoService.makeToDoList(dto)).thenReturn(toDo);
 
             mockMvc.perform(post("/api/todo")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaTypes.HAL_JSON)
-                    .content(objectMapper.writeValueAsString(dto)))
+                        .header(HttpHeaders.AUTHORIZATION, getBearerToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaTypes.HAL_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
                     .andDo(print())
                     .andExpect(status().isCreated())
                     .andExpect(jsonPath("id").exists())
@@ -107,6 +129,7 @@ public class ToDoControllerTests extends BaseTestController {
             ToDo toDo = ToDo.createTask(dto);
 
             mockMvc.perform(post("/api/todo")
+                    .header(HttpHeaders.AUTHORIZATION, getBearerToken())
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaTypes.HAL_JSON)
                     .content(objectMapper.writeValueAsString(toDo)))
@@ -123,6 +146,7 @@ public class ToDoControllerTests extends BaseTestController {
             ToDoDto dto = new ToDoDto();
 
             mockMvc.perform(post("/api/todo")
+                    .header(HttpHeaders.AUTHORIZATION, getBearerToken())
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaTypes.HAL_JSON)
                     .content(objectMapper.writeValueAsString(dto)))
@@ -141,6 +165,7 @@ public class ToDoControllerTests extends BaseTestController {
                     LocalDateTime.now().minusDays(10));
 
             mockMvc.perform(post("/api/todo")
+                    .header(HttpHeaders.AUTHORIZATION, getBearerToken())
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaTypes.HAL_JSON)
                     .content(objectMapper.writeValueAsString(dto)))
@@ -216,6 +241,7 @@ public class ToDoControllerTests extends BaseTestController {
             String update = "Update";
             ToDoUpdateRequest dto = new ToDoUpdateRequest(update, update);
             mockMvc.perform(put("/api/todo/{id}", toDo.getId())
+                    .header(HttpHeaders.AUTHORIZATION, getBearerToken())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(dto)))
                     .andDo(print())
@@ -240,6 +266,7 @@ public class ToDoControllerTests extends BaseTestController {
             ToDoUpdateRequest dto = new ToDoUpdateRequest(update, update, deadline);
             System.out.println(toDo.getEndDateTime().toString());
             mockMvc.perform(put("/api/todo/{id}", toDo.getId())
+                    .header(HttpHeaders.AUTHORIZATION, getBearerToken())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(dto)))
                     .andDo(print())
@@ -267,7 +294,8 @@ public class ToDoControllerTests extends BaseTestController {
                 assertStatus = ToDoStatus.TODO.toString();
             }
 
-            mockMvc.perform(put("/api/todo/{id}/status", toDo.getId()))
+            mockMvc.perform(put("/api/todo/{id}/status", toDo.getId())
+                    .header(HttpHeaders.AUTHORIZATION, getBearerToken()))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("toDoStatus").value(assertStatus))
@@ -285,6 +313,7 @@ public class ToDoControllerTests extends BaseTestController {
             ToDoUpdateRequest dto = new ToDoUpdateRequest(update, update, deadline);
             System.out.println(toDo.getEndDateTime().toString());
             mockMvc.perform(put("/api/todo/{id}", toDo.getId() + 1)
+                    .header(HttpHeaders.AUTHORIZATION, getBearerToken())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(dto)))
                     .andDo(print())
@@ -302,7 +331,8 @@ public class ToDoControllerTests extends BaseTestController {
         public void deleteToDo() throws Exception {
             ToDo toDo = generateToDo(300);
 
-            mockMvc.perform(delete("/api/todo/{id}", toDo.getId()))
+            mockMvc.perform(delete("/api/todo/{id}", toDo.getId())
+                    .header(HttpHeaders.AUTHORIZATION, getBearerToken()))
                     .andExpect(status().isOk())
 //                    .andExpect(jsonPath("_links.self").exists())
 //                    .andExpect(jsonPath("_links.profile").exists())
@@ -316,4 +346,28 @@ public class ToDoControllerTests extends BaseTestController {
         return toDoService.makeToDoList(new ToDoDto("ToDo" + idx, "Test ToDo"));
     }
 
+    private String getBearerToken() throws Exception {
+
+        String username = "test@email.com";
+        String password = "test";
+        Account account = Account.join(username, password,
+                Set.of(AccountRole.ADMIN, AccountRole.USER));
+        accountService.saveAccount(account);
+
+        String clientId = "myApp";
+        String clientSecret = "secret";
+
+        ResultActions perform = mockMvc.perform(post("/oauth/token")
+                .with(httpBasic(clientId, clientSecret))
+                .param("username", username)
+                .param("password", password)
+                .param("grant_type", "password")
+        );
+
+        MockHttpServletResponse response = perform.andReturn().getResponse();
+        var responseBody = response.getContentAsString();
+        Jackson2JsonParser parser = new Jackson2JsonParser();
+        return "Bearer " + parser.parseMap(responseBody).get("access_token").toString();
+
+    }
 }
