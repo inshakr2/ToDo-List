@@ -104,6 +104,6 @@ public class ToDoServiceImpl implements ToDoService {
 
         toDoRepository.deleteById(id);
 
-        return 0;
+        return 1;
     }
 }
