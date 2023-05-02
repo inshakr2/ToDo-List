@@ -32,9 +32,13 @@ public class AppConfig {
             @Override
             public void run(ApplicationArguments args) throws Exception {
 
-                Account account = Account.join("chany@email.com", "chany",
-                                         Set.of(AccountRole.ADMIN, AccountRole.USER));
-                accountService.saveAccount(account);
+                Account user = Account.join("chany@email.com", "chany",
+                                         Set.of(AccountRole.USER));
+                accountService.saveAccount(user);
+
+                Account admin = Account.join("admin@email.com", "admin",
+                        Set.of(AccountRole.ADMIN, AccountRole.USER));
+                accountService.saveAccount(admin);
 
             }
         };
