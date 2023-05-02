@@ -22,23 +22,17 @@ public class AuthServerConfigTest extends BaseTestController {
     @Autowired
     AccountService accountService;
 
+    @Autowired
+    AppProperties appProperties;
+
     @Test
     @DisplayName("인증 토큰 발급 테스트")
     public void getAuthToken() throws Exception{
 
-        String username = "test@email.com";
-        String password = "test";
-        Account account = Account.join(username, password,
-                Set.of(AccountRole.ADMIN, AccountRole.USER));
-        accountService.saveAccount(account);
-
-        String clientId = "myApp";
-        String clientSecret = "secret";
-
         this.mockMvc.perform(post("/oauth/token")
-                    .with(httpBasic(clientId,clientSecret))
-                    .param("username", username)
-                    .param("password", password)
+                    .with(httpBasic(appProperties.getClientId(), appProperties.getClientSecret()))
+                    .param("username", appProperties.getUserUsername())
+                    .param("password", appProperties.getUserPassword())
                     .param("grant_type", "password")
         )
                 .andDo(print())

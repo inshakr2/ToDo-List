@@ -27,3 +27,11 @@ spring:
   jackson:
     deserialization:
       fail-on-unknown-properties: true
+
+my-app:
+  admin-username: admin@email.com
+  admin-password: admin
+  user-username: chany@email.com
+  user-password: chany
+  client-id: myApp
+  client-secret: secret

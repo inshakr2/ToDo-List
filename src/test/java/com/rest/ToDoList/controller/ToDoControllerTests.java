@@ -1,6 +1,7 @@
 package com.rest.ToDoList.controller;
 
 import com.rest.ToDoList.common.BaseTestController;
+import com.rest.ToDoList.config.AppProperties;
 import com.rest.ToDoList.domain.Account;
 import com.rest.ToDoList.domain.AccountRole;
 import com.rest.ToDoList.domain.ToDo;
@@ -46,6 +47,9 @@ public class ToDoControllerTests extends BaseTestController {
 
     @Autowired
     AccountRepository accountRepository;
+
+    @Autowired
+    AppProperties appProperties;
 
     @BeforeEach
     public void initializeRepository() {
@@ -348,19 +352,14 @@ public class ToDoControllerTests extends BaseTestController {
 
     private String getBearerToken() throws Exception {
 
-        String username = "test@email.com";
-        String password = "test";
-        Account account = Account.join(username, password,
+        Account account = Account.join(appProperties.getUserUsername(), appProperties.getUserPassword(),
                 Set.of(AccountRole.ADMIN, AccountRole.USER));
         accountService.saveAccount(account);
 
-        String clientId = "myApp";
-        String clientSecret = "secret";
-
         ResultActions perform = mockMvc.perform(post("/oauth/token")
-                .with(httpBasic(clientId, clientSecret))
-                .param("username", username)
-                .param("password", password)
+                .with(httpBasic(appProperties.getClientId(), appProperties.getClientSecret()))
+                .param("username", appProperties.getUserUsername())
+                .param("password", appProperties.getUserPassword())
                 .param("grant_type", "password")
         );
 

@@ -29,14 +29,17 @@ public class AppConfig {
             @Autowired
             AccountService accountService;
 
+            @Autowired
+            AppProperties appProperties;
+
             @Override
             public void run(ApplicationArguments args) throws Exception {
 
-                Account user = Account.join("chany@email.com", "chany",
+                Account user = Account.join(appProperties.getUserUsername(), appProperties.getUserPassword(),
                                          Set.of(AccountRole.USER));
                 accountService.saveAccount(user);
 
-                Account admin = Account.join("admin@email.com", "admin",
+                Account admin = Account.join(appProperties.getAdminUsername(), appProperties.getAdminPassword(),
                         Set.of(AccountRole.ADMIN, AccountRole.USER));
                 accountService.saveAccount(admin);
 
